@@ -1,27 +1,9 @@
-var opt = require('optimist'),
-	packageJSON = require('./package.json'),
-	argv = opt
-		.alias('h', 'help')
-		.alias('?', 'help')
-		.describe('help', 'Display help')
-		.usage('Starts ' + packageJSON.name + ' framework for serving multiple sites.\n\nVersion: ' + packageJSON.version + '\nAuthor: ' + packageJSON.author)
-		.alias('v', 'version')
-		.describe('version', 'Display Mixdown Boilerplate version.')
-		.argv,
-	mixdown = require('mixdown-server'),
+var mixdown = require('mixdown-server'),
 	serverConfig = new mixdown.Config(require( './server.json')),
-	envConfig = null;
+	envConfig = null,
+	packageJSON = require('./package.json');
 
-
-if(argv.help) {
-	opt.showHelp();
-	return;
-}
-
-if(argv.version) {
-	console.log(packageJSON.version);
-	return;
-}
+serverConfig.config.server.version = packageJSON.version;
 
 // wire up error event listeners before initializing config.
 serverConfig.on('error', function(err) {
@@ -34,17 +16,13 @@ try {
 }
 catch (e) {}
 
-// Create main entry point
 var main = mixdown.MainFactory.create({
-	packageJSON: require('./package.json'),
+	packageJSON: packageJSON,
 	serverConfig: serverConfig
 });
 
-// run init on server config.  This calls init on broadway plugins.
 serverConfig.init();
 
-
-// Start the server.
 main.start(function(err, main) {
 
 	if (err) {
@@ -63,8 +41,4 @@ main.start(function(err, main) {
 var ga = require("http").globalAgent;
 ga.maxSockets = 500;
 logger.info('globalAgent.maxSockets: ' + ga.maxSockets);
-
-module.exports = {
-	main: main,
-	mixdownConfig: serverConfig
-};
+logger.info('Application Version: ' + serverConfig.server.version);
