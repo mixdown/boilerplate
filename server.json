@@ -2,38 +2,184 @@
 	"app": {
 		"plugins":{
 			"router": {
-				"module": "/plugins/router.js"
-			},			
-			"pipelines": {
-				"module": "/plugins/pipelines.js"
-			},
-			"view": {
-				"module": "broadway-handlebars",
-				"options": {
-					"optimize": false,
-					"development": true,
-					"view": {
-                        "base": ["./views"],
-                        "ext": "html"
-                    }
-				}
-			},
-			"json": {
-				"module": "mixdown-plugins#Json"
-			},
-			"error": {
-				"module": "mixdown-plugins#Error"
-			},
-			"static": {
-                "module": "mixdown-plugins#Static"
+				"module": "/plugins/router.js",
+        "options": {
+          "timeout": 10000,
+          "routes": {
+            "home": {
+              "method": "GET",
+              "name": "home",
+              "path": "/",
+              "description": "Home page.",
+              "handler": "page",
+              "params": {},
+              "enabled": true
             },
+            "geo": {
+              "method": "GET",
+              "name": "geo",
+              "path": "/geo",
+              "description": "Geolocation user.",
+              "handler": "page",
+              "params": {},
+              "enabled": true
+            },
+            "map": {
+              "method": "GET",
+              "name": "map",
+              "path": "/map/rect/:sw/:ne",
+              "description": "Shows a map with restaurants on it.",
+              "handler": "page",
+              "params": {
+                "sw": {
+                  "regex": "([\\d\\,.-]+)",
+                  "kind": "rest",
+                  "enabled": true
+                },
+                "ne": {
+                  "regex": "([\\d\\.,-]+)",
+                  "kind": "rest",
+                  "enabled": true
+                }
+              },
+              "enabled": true
+            },
+            "image": {
+              "method": "GET",
+              "name": "image",
+              "path": "/img/:image_src",
+              "description": "Gets a static image.",
+              "handler": "image",
+              "timeout": 6000,
+              "params": {
+                "image_src": {
+                  "regex": "([.-\\w\/@]+)",
+                  "kind": "rest",
+                  "enabled": true
+                },
+                "v": {
+                  "regex": "([\\w\\.-]+)",
+                  "kind": "query",
+                  "description": "cachebuster",
+                  "enabled": true
+                }
+              },
+              "enabled": true
+            },
+            "css": {
+              "method": "GET",
+              "name": "css",
+              "path": "/css/:css_src",
+              "description": "Returns a css file.",
+              "handler": "css",
+              "timeout": 6000,
+              "params": {
+                "css_src": {
+                  "regex": "([.-\\w]+\\.css)",
+                  "kind": "rest",
+                  "enabled": true
+                },
+                "v": {
+                  "regex": "([\\w\\.-]+)",
+                  "kind": "query",
+                  "description": "cachebuster",
+                  "enabled": true
+                }
+              },
+              "enabled": true
+            },
+            "js": {
+              "method": "GET",
+              "name": "js",
+              "path": "/js/:js_src",
+              "description": "Returns a javascript file.",
+              "handler": "js",
+              "params": {
+                "js_src": {
+                  "regex": "([.-\\w]+\\.js)",
+                  "kind": "rest",
+                  "enabled": true
+                },
+                "v": {
+                  "regex": "([\\w\\.-]+)",
+                  "kind": "query",
+                  "description": "cachebuster",
+                  "enabled": true
+                }
+              },
+              "enabled": true
+            },
+            "templateApi": {
+              "method": "GET",
+              "name": "templateApi",
+              "path": "/api/templates",
+              "description": "Returns the templates for application.",
+              "handler": "templates",
+              "params": {},
+              "enabled": true
+            },
+            "manifest": {
+              "method": "GET",
+              "name": "manifest",
+              "path": "/manifest",
+              "description": "List of all of the routes available on this site.",
+              "handler": "manifest",
+              "params": {},
+              "enabled": true
+            }
+          }
+        }
+			},			
+      "view": {
+        "module": "broadway-handlebars",
+        "options": {
+          "optimize": false,
+          "development": true,
+          "view": {
+            "base": [
+              "./views"
+            ],
+            "ext": "html"
+          }
+        }
+      },
 			"less": {
-				"module": "mixdown-less",
-				"options": { 
-					"compress": true, 
-					"paths": ["./css"] 
-				}
-			}
+        "module": "mixdown-less",
+        "options": {
+          "compress": false,
+          "paths": [ "./less", "./less/bootstrap", "./less/partials", "../" ]
+        }
+      },
+      "json": {
+        "module": "mixdown-plugins#Json"
+      },
+      "static": {
+        "module": "mixdown-plugins#Static",
+        "options": {
+          "headers": {}
+        }
+      },
+      "pipelines": {
+        "module": "mixdown-pipelines"
+      },
+      "error": {
+        "module": "mixdown-plugins#Error"
+      },
+      "browserify": {
+        "module": "mixdown-plugins#Browserify",
+        "options": {
+          "compress": false,
+          "ignore": [
+            "./viewresolver",
+            "crypto",
+            "fs",
+            "file"
+          ],
+          "alias": {
+            "underscore": "lodash"
+          }
+        }
+      }
 		}
 	},
 	"sites": [
@@ -46,26 +192,26 @@
 			"plugins": {}
 		}
 	],
-    "server": {
-        "listen": {
-            "port": 8081,
-            "type": "tcp",
-            "path": "/tmp/socketname.sock"
-        },
-        "logger": {
-            "defaults": {
-                "handleExceptions": false,
-                "json": false,
-                "timestamp": true,
-                "colorize": true,
-                "prettyPrint": true
-            },
-            "transports": [{
-                "transport": "Console",
-                "options": {
-                    "level": "debug"
-                }
-            }]
+  "server": {
+    "listen": {
+      "port": 8081,
+      "type": "tcp",
+      "path": "/var/run/socketname.sock"
+    },
+    "logger": {
+      "defaults": {
+        "handleExceptions": false,
+        "json": false,
+        "timestamp": true,
+        "colorize": true,
+        "prettyPrint": true
+      },
+      "transports": [{
+        "transport": "Console",
+        "options": {
+          "level": "debug"
         }
+      }]
     }
+  }
 }

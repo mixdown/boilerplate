@@ -1,108 +1,213 @@
-var path = require('path'),
-	Router = require('pipeline-router');
+var _ = require('lodash');
+var util = require('util');
+var MixdownRouter = require('mixdown-router');
+var getClientPlugins = require('./clientplugins');
 
-var HelloRouter = function() {};
+// router impl.
+var Router = function() {
+  if (!(this instanceof Router)) {
+    return new Router();
+  }
 
-/**
-* Attaches a router plugin to an application.
-*
-**/ 
-HelloRouter.prototype.attach = function (options) {
-	var app = options.app;
+  MixdownRouter.apply(this, arguments);
+};
 
-	/**
-	* Initializes the routes for this application
-	*
-	**/
-	this.router = function() {
-	    var router = new Router();
+util.inherits(Router, MixdownRouter);
 
-	    router.param('css', /(.*)\.css/);
-	    router.param('image', /.*\.jpeg|jpg|gif|png|ico|icns?/);
 
-	    router.get('/', function(req, res) {
+// Added server version as a cachebuster.
+Router.prototype.attach = function (options) {
+  var app = options.app;
+  var cachebuster = null;
+  var cacheBusterRoutes = ['image', 'css', 'js', 'templateApi'];
 
-	    	// put the querystring on the viewmodel
-	    	var viewmodel = { query: req.urlParsed.query };
+  try {
+  	// anytime you run npm version, this updates.
+    cachebuster = app.config.server.version;
+  }
+  catch (e) {
+    cachebuster = e.message;
+  }
 
-	    	// render the html
-	    	app.plugins.render('index', viewmodel, function(err, html) {
+  MixdownRouter.prototype.attach.apply(this, arguments);
 
-	    		// send to error handler if render problem.
-	    		if (err) {
-					app.plugins.error.fail(err, res);
-					return;
-				}
-				
-				// stream the response.
-				res.writeHead(200, {'Content-Type': 'text/html'});
-				res.end(html);
-	    	});	
-	    });
-	    
-	     router.get('/api', function(req, res) {
-	    	// put the querystring on the viewmodel
-	    	var viewmodel = { query: req.urlParsed.query };
+  var _url = this.router.url;
 
-	    	// stream object.
-	    	app.plugins.json(viewmodel, res);
-	    });
+  // override the default impl and add the cachebuster
+  this.router.url = function(route, params) {
+    var u = _url.call(this, route, params);
 
-	    // style sheets files
-	    router.get('/css/:css', function(req, res) {
+    if (cacheBusterRoutes.indexOf(route) >= 0) {
+      u.query = u.query || {};
+      u.query.v = cachebuster;
+    }
 
-	    	var pl = app.plugins.less.pipeline(),
-				file = path.normalize(__dirname + '/../css/' + req.params.css + '.less');
-
-			pl.on('error', function(err) {
-				app.plugins.error.fail(err, res);
-			})
-			.on('end', function(err, results) {
-				if (!err) {
-					app.plugins.static.stream({
-	    				path: req.urlParsed.pathname,
-	    				res: res,
-	    				content: results[results.length - 1]
-	    			}, function(err) {
-	    				app.plugins.error.fail(err, res);
-	    			});
-				}
-			})
-			.execute({
-				file: file
-			});
-	    });
-
-		// style sheets files
-	    router.get('/img/:image', function(req, res) {
-
-	    	// create pipeline instance
-	    	var pl = app.plugins.pipelines.static();
-
-	    	// give it a helpful name (this is good practice for logging)
-	    	pl.name += ': ' + req.urlParsed.path;
-
-	    	// execute it!
-	    	pl.execute({ path: req.urlParsed.pathname.replace('/img', ''), res: res, locations: ['./img'] });
-	    });
-
-	    // style sheets files
-	    router.get('/favicon.ico', function(req, res) {
-
-	    	// create pipeline instance
-	    	var pl = app.plugins.pipelines.static();
-
-	    	// give it a helpful name (this is good practice for logging)
-	    	pl.name += ': ' + req.urlParsed.path;
-
-	    	// execute it!
-	    	pl.execute({ path: req.urlParsed.pathname, res: res, locations: ['./img'] });
-	    });
-
-	    return router;
-	};
-
+    return u;
+  }
 
 };
 
-module.exports = HelloRouter;
+
+Router.prototype.page = function(httpContext) {
+  var app = httpContext.app;
+  var res = httpContext.response;
+  var viewModel = {
+  	meta: app.plugins.metadata.get(httpContext.route.name)
+  };
+
+  app.plugins.render('index', viewModel, function(err, html) {
+    if (err) {
+      app.plugins.error.fail(err, res);
+      return;
+    }
+
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.end(html);
+
+  });
+
+};
+
+Router.prototype.image = function(httpContext) {
+  var app = httpContext.app;
+  var pipelines = app.plugins.pipelines;
+  var res = httpContext.response;
+  var pl = pipelines.static();
+
+  pl.name += ': ' + httpContext.url.path;
+
+  pl.on('error', function(err, results) {
+    if (err) {
+      logger.error('Caught error on image pipeline', err);
+      console.log(httpContext.params.image_src);
+    }
+
+    app.plugins.error.fail(err, res);
+  });
+
+  pl.execute({ 
+    path: httpContext.url.pathname.replace(/\/img/, ''),
+    res: 
+    res, 
+    locations: ['./img', './' + app.id + '/img'] 
+  });
+
+};
+
+Router.prototype.css = function(httpContext) {
+  var app = httpContext.app;
+  var pipelines = app.plugins.pipelines;
+  var res = httpContext.response;
+  var pl = pipelines.static();
+
+  var pl = app.plugins.less.pipeline();
+  pl.name += ': ' + httpContext.url.path;
+  
+  var sent = false;
+  var sendResponse = function(err, results) {
+    if (!sent) {
+      sent = true;
+
+      if (err) {
+        app.plugins.error.fail(err, res);
+      }
+      else {
+        var cssContent = results && results.length ? results[results.length - 1] : null;
+
+        app.plugins.static.stream({
+          path: httpContext.url.pathname,
+          res: res,
+          content: cssContent 
+        }, function(err) {
+          app.plugins.error.fail(err, res);
+        });
+
+      }
+    }
+  };
+
+  pl.on('error', sendResponse).on('end', sendResponse).execute({
+    file: './less/' + httpContext.params.css_src.replace(/\.css$/, '.less')
+  });
+  
+};
+
+Router.prototype.js = function(httpContext) {
+  var app = httpContext.app;
+  var pipelines = app.plugins.pipelines;
+  var req = httpContext.request;
+  var res = httpContext.response;
+  var pl = pipelines.generic();
+
+  var compress = function(path, callback) {
+    fs.exists(path, function(exists) {
+      if (exists) {
+        try {
+          app.plugins.browserify(path, callback);
+        } catch (e) {
+          callback(e);
+        }
+      }
+      else {
+        callback();
+      }
+    });
+  };
+  
+  pl.name += ': ' + httpContext.url.path;
+
+  pl.on('error', function(err, results) {
+    if (err) {
+      logger.error('Caught error on JS pipeline', err);
+    }
+
+    app.plugins.error.fail(err, res);
+  });
+
+  pl.use(function(results, next) {
+    compress(results[0].pathname, next);
+  });
+
+  pl.on('end', function(err, results) {
+    if (!err) {
+      app.plugins.static.stream({
+        path: httpContext.url.pathname,
+        res: res,
+        content: results[results.length - 1]
+      }, function(err) {
+        app.plugins.error.fail(err, res);
+      });
+    }
+  });
+
+  pl.execute({ req: req, res: res, pathname: './js/' + httpContext.params.js_src });
+
+};
+
+// Templates
+Router.prototype.templates = function(httpContext) {
+  var app = httpContext.app;
+  var res = httpContext.response;
+  var headers = app.config.plugins.static.options.headers;
+
+  app.plugins.templates(function(err, templates) {
+    if (err) {
+      app.plugins.error.fail(err, res);
+    }
+    else {
+      app.plugins.json(templates, res, headers);
+    }
+  });
+
+};
+
+Router.prototype.manifest = function(httpContext) {
+  var app = httpContext.app;
+  var res = httpContext.response;
+  var headers = app.config.plugins.static.options.headers;
+
+  app.plugins.json(app.plugins.router.routes, res, headers);
+};
+
+
+module.exports = Router;

@@ -1,44 +1,49 @@
 {
-    "name": "mixdown-boilerplate",
-    "version": "0.2.1",
-    "main": "index",
-    "description": "Base site implementation for a mixdown powered site.",
-    "keywords": [
-        "node"
-    ],
-    "author": {
-        "name": "Vast",
-        "email": "vastjs-dev@vast.com",
-        "web": "http://vastdevblog.vast.com/"
-    }, 
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "git@github.com:mixdown/boilerplate"
-    },
-    "directories": {
-        "tests": "tests"
-    },
-    "engines": {
-        "node": ">=0.8.0"
-    },
-    "scripts": {
-        "start": "node server"
-    },
-    "dependencies": {
-        "lodash": "1.0.1",
-        "pipeline-router": "0.7.x",
-        "optimist": "0.3.4",
-        "mixdown-server": "~0.3.10",
-        "mixdown-plugins": "~2.1.0",
-        "mixdown-pipelines": "~0.0.2",
-        "broadway-handlebars": "*",
-        "mixdown-less": "~0.1.0",
-        "node-pipeline": "~0.4.0"
-    },
-        "devDependencies": {
-    },
-    "optionalDependencies": {},
-    "homepage": "http://vastdevblog.vast.com/"
+  "name": "mixdown-boilerplate",
+  "version": "0.3.0",
+  "main": "index",
+  "description": "Boilerplate for everyone's favorite boilerplate tool - Yeoman.",
+  "keywords": [
+    "node"
+  ],
+  "author": {
+    "name": "Vast",
+    "email": "vastjs-dev@vast.com",
+    "web": "http://vastdevblog.vast.com/"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mixdown/boilerplate"
+  },
+  "directories": {
+    "tests": "tests"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "scripts": {
+    "start": "node server"
+  },
+  "dependencies": {
+    "lodash": "1.3.x",
+    "mixdown-router": "~0.2.8",
+    "mixdown-server": "~0.5.4",
+    "mixdown-plugins": "~2.2.6",
+    "mixdown-pipelines": "~0.0.2",
+    "broadway-handlebars": "~0.2.1",
+    "mixdown-less": "~0.1.0",
+    "broadway": "~0.2.7",
+    "backbone": "~1.0.0",
+    "bootstrap": "git+https://github.com/twbs/bootstrap.git#v3.0.0-rc1",
+    "cookies-js": "0.3.1",
+    "hammerjs": "1.0.5"
+  },
+  "devDependencies": {
+    "tap": "*",
+    "tape": "*",
+    "mocha": "*"
+  },
+  "optionalDependencies": {},
+  "homepage": "http://vastdevblog.vast.com/"
 }
-
