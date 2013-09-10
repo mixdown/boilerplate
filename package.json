@@ -31,7 +31,7 @@
     "mixdown-server": "~0.5.4",
     "mixdown-plugins": "~2.2.6",
     "mixdown-pipelines": "~0.0.2",
-    "broadway-handlebars": "~0.2.1",
+    "broadway-handlebars": "~0.2.3",
     "mixdown-less": "~0.1.0",
     "broadway": "~0.2.7",
     "backbone": "~1.0.0",

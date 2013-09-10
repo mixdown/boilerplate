@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{title}}</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="{{url "css" css_src="screen.css"}}" />
+  {{#each meta}}
+      <meta name="{{value.name}}" content="{{value.content}}" />
+  {{/each}}
+
+  {{> common.pubsub }}
+
+  <script>
+    window.eventEmitter.on('mixdown-load', function(app) {
+      {{! in case you want to attach our internal instance of jQuery to window }}
+      {{! you can also access any other libraries here }}
+      window.$ = window.jQuery = app.$;
+    });
+    window.eventEmitter.on('mixdown-error', console.error);
+    window.eventEmitter.on('mixdown-log', console.log);
+  </script>
+  </head>
+
+  <body>
+  {{> common.header }}

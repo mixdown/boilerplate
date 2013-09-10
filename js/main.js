@@ -9,7 +9,7 @@ var $ = app.$;
 
 /** Load Models.  1 model should be exported from each module. **/
 app.models = {
-  hello: require('./demo/models/hello.js');
+  hello: require('./demo/models/hello.js')
 };
 
 /** Model setting - In case you need it. **/
@@ -17,7 +17,7 @@ app.models = {
 
 /** Load Views.  1 view should be exported from each module. **/
 app.views = {
-  hello: require('./demo/views/hello.js');
+  hello: require('./demo/views/hello.js')
 };
 
 // Example of page change event.  This should be in a separate file.  Leaving here for now.

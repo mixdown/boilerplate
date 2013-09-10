@@ -2,7 +2,7 @@
 	"app": {
 		"plugins":{
 			"router": {
-				"module": "/plugins/router.js",
+				"module": "/plugins/router/router.js",
         "options": {
           "timeout": 10000,
           "routes": {
@@ -27,7 +27,7 @@
             "map": {
               "method": "GET",
               "name": "map",
-              "path": "/map/rect/:sw/:ne",
+              "path": "/map/:sw/:ne",
               "description": "Shows a map with restaurants on it.",
               "handler": "page",
               "params": {
@@ -140,6 +140,29 @@
               "./views"
             ],
             "ext": "html"
+          }
+        }
+      },
+      "seo": {
+        "module": "/plugins/seocontent.js",
+        "options": {
+          "home": {
+            "meta": {
+              "keywords": "hello,mixdown.js,javascript,less.css,backbone.js"
+            },
+            "title": "Hello Mixdown"
+          },
+          "geo": {
+            "meta": {
+              "keywords": "mixdown.js,geolocation"
+            },
+            "title": "Geolocate User"
+          },
+          "map": {
+            "meta": {
+              "keywords": "mixdown.js,map"
+            },
+            "title": "Demo of a page with a map"
           }
         }
       },

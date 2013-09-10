@@ -1,1 +1,1 @@
-module.exports = ['home' 'geo', 'map'];
+module.exports = ['home', 'geo', 'map'];

@@ -46,7 +46,7 @@ MixdownBackboneRouter.prototype.attach = function(options) {
       Backbone.Router.prototype.navigate(fragment.replace(/^\//, ''), options);
     }
 
-  });
+  }));
 };
 
 module.exports = MixdownBackboneRouter;
