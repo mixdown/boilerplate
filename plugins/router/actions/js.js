@@ -41,15 +41,17 @@ module.exports = function(httpContext) {
     if (!err) {
       var jscontent = 'window.MIXDOWN = ' + 
       JSON.stringify({
-        // send the routes down to the client with the main.js file.
-        router: { "routes" : app.plugins.router.lightRoutes }
+        plugins: {
+          // send the routes down to the client with the main.js file.
+          router: { "routes" : app.plugins.router.lightRoutes }
+        }
       }) + ';'
       + results[results.length-1];
 
       app.plugins.static.stream({
         path: httpContext.url.pathname,
         res: res,
-        content: results[results.length - 1]
+        content: jscontent
       }, function(err) {
         app.plugins.error.fail(err, res);
       });

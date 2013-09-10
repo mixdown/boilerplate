@@ -37,7 +37,8 @@
     "backbone": "~1.0.0",
     "bootstrap": "git+https://github.com/twbs/bootstrap.git#v3.0.0-rc1",
     "cookies-js": "0.3.1",
-    "hammerjs": "1.0.5"
+    "hammerjs": "1.0.5",
+    "mixdown-geotools": "*"
   },
   "devDependencies": {
     "tap": "*",
