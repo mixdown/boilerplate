@@ -15,10 +15,22 @@
       {{! you can also access any other libraries here }}
       window.$ = window.jQuery = app.$;
     });
-    window.eventEmitter.on('mixdown-error', console.error);
-    window.eventEmitter.on('mixdown-log', console.log);
+    window.eventEmitter.on('mixdown-error', console.error.bind(console));
+    window.eventEmitter.on('mixdown-log', console.log.bind(console));
   </script>
   </head>
 
   <body>
   {{> common.header }}
+
+  <div id="mixdown-container">
+    <section id="off-canvas">
+        <section id="mixdown-left" class="column">
+          <div style="height: 400px">
+          <p>
+            Quisque accumsan turpis id orci ornare rutrum. Cras quis dapibus massa, id dictum turpis. Curabitur euismod sapien vestibulum turpis porta gravida. Maecenas ultrices viverra ipsum, et imperdiet neque pretium vitae. In eu diam libero. Nam luctus purus sit amet odio vehicula mollis. Aliquam at tortor congue, ornare nulla sit amet, egestas est.
+          </p>
+        </div>
+
+        </section>
+        <section id="mixdown-main" class="column">

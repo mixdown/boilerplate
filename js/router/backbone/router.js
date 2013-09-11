@@ -4,8 +4,12 @@ MixdownBackboneRouter.prototype.attach = function(options) {
   var app = options.app;
   var routes = require('./maproutes.js')(app, options.clientRoutes);
 
+  // publish log event
+  eventEmitter.emit('mixdown-log', { module: "MixdownBackboneRouter", data: { routes: routes }, err: null });
+
   this.backboneRouter = new (app.Backbone.Router.extend({
     routes: routes,
+    app: app,
 
     home: require('./actions/home.js'),
     geo: require('./actions/geo.js'),
@@ -13,7 +17,7 @@ MixdownBackboneRouter.prototype.attach = function(options) {
 
     // override here to use the url generator.
     navigate: function(fragment, options) {
-      Backbone.Router.prototype.navigate(fragment.replace(/^\//, ''), options);
+      app.Backbone.Router.prototype.navigate(fragment.replace(/^\//, ''), options);
     }
 
   }));

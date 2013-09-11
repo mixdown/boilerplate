@@ -12,6 +12,13 @@ var Backbone = app.Backbone;
 /** Model setting - In case you need it. **/
 // app.Backbone.emulateHTTP = true;
 
+/** Add any global views or models here **/
+var HeaderView = require('./demo/views/header.js');
+var header = new HeaderView({
+  el: app.plugins.containers.$header,
+  app: app 
+});
+
 // Start backbone router and interact with it.
 Backbone.history.start({
   pushState: true, 

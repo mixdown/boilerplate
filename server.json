@@ -118,6 +118,15 @@
               "params": {},
               "enabled": true
             },
+            "homeApi": {
+              "method": "GET",
+              "name": "homeApi",
+              "path": "/api/home",
+              "description": "Returns the content for the home page.",
+              "handler": "homeApi",
+              "params": {},
+              "enabled": true
+            },
             "manifest": {
               "method": "GET",
               "name": "manifest",
@@ -142,6 +151,9 @@
             "ext": "html"
           }
         }
+      },
+      "fakedatabase": {
+        "module": "/plugins/fakedatabase.js"
       },
       "seo": {
         "module": "/plugins/seocontent.js",

@@ -26,17 +26,15 @@ app.plugins.use(new UrlGenerator(), _.extend(window.MIXDOWN.plugins.router, { ap
 // attach rendering plugin.  The view resolver pulls all the templates via Backbone model.
 app.plugins.use(new Handlebars(), {
   app: app,
-  viewResolver: require('./render/handlebars/viewresolver.js')
+  viewResolver: require('./render/handlebars/viewresolver.js')(app)
 });
 
 // Load pointers to main containers.  This is a 2 panel layout with a header.
+// Now the following will work - app.plugins.containers.$wrapper; app.plugins.containers.$main; app.plugins.containers.$left;
 var Containers = require('./containers.js');
 app.plugins.use(new Containers(), { app: app });
-// Now the following will work
-// var $wrapper = app.plugins.containers.$wrapper;
-// var $main = app.plugins.containers.$main;
-// var $left = app.plugins.containers.$left;
 
+// Initialize backbone router.
 var MixdownBackboneRouter = require('./router/backbone/router.js');
 app.plugins.use(new MixdownBackboneRouter(), { 
   app: app, 

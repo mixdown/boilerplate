@@ -11,7 +11,7 @@ module.exports = function(app) {
 
       var processPending = function(err, tcache) {
 
-        _.each(tvm.pending, function(cb) {
+        _.each(pending, function(cb) {
           cb(err, tcache);
         });
 

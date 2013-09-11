@@ -8,7 +8,8 @@ var Containers = function() {
     this.containers = {
       $wrapper: $('#mixdown-container'),
       $main: $('#mixdown-main'),
-      $left: $('#mixdown-left')
+      $left: $('#mixdown-left'),
+      $header: $('header')
     };
   };
 
