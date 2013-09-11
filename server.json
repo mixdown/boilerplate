@@ -1,6 +1,15 @@
 {
 	"app": {
 		"plugins":{
+      "googleMaps": {
+        "module": "mixdown-plugins#KeyValue",
+        "options": {
+          "key": "googleMaps",
+          "value": {
+            "apikey": "put-your-apikey-here"
+          }
+        }
+      },
 			"router": {
 				"module": "/plugins/router/router.js",
         "options": {

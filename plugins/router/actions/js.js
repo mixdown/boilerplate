@@ -43,7 +43,8 @@ module.exports = function(httpContext) {
       JSON.stringify({
         plugins: {
           // send the routes down to the client with the main.js file.
-          router: { "routes" : app.plugins.router.lightRoutes }
+          router: { "routes" : app.plugins.router.lightRoutes },
+          googleMaps: app.plugins.googleMaps
         }
       }) + ';'
       + results[results.length-1];

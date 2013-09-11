@@ -38,7 +38,7 @@ var FakeDatabase = function(namespace) {
         {
           "title": "Show me a demo!",
           "href": "/geo",
-          "description": "Takes you to a geolocation and map of restaurants."
+          "description": "Takes you to a geolocation page that redirects to a traffic map."
         }
       ]
     };

@@ -8,7 +8,7 @@ module.exports = function() {
   navigator.geolocation.getCurrentPosition(
 
     function(pos) {
-      var mapParams = geoTools.rect(pos.coords, 20, 'miles');
+      var mapParams = geoTools.rect(pos.coords, 10, 'miles');
       mapParams.sw = mapParams.sw.latitude + ',' + mapParams.sw.longitude;
       mapParams.ne = mapParams.ne.latitude + ',' + mapParams.ne.longitude;
       backboneRouter.navigate( router.url('map', mapParams).pathname, { trigger: true } );

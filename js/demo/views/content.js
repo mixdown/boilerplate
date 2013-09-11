@@ -22,8 +22,8 @@ module.exports = Backbone.View.extend({
 
     // override local urls so that they are navigated via BB.
     if (!/http/.test(href)) {
-      backboneRouter.navigate( $t.attr('href'), { trigger: true } );
       e.preventDefault();
+      backboneRouter.navigate( href, { trigger: true } );
     }
   }
 });
