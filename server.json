@@ -6,7 +6,7 @@
         "options": {
           "key": "googleMaps",
           "value": {
-            "apikey": "put-your-apikey-here"
+            "apikey": "put-your-apikey-here-or-use-an-override-config"
           }
         }
       },
