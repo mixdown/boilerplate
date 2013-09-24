@@ -28,7 +28,7 @@ module.exports = function(sw, ne) {
   window.gmapsLoaded = function() {
     var myLatlng = new google.maps.LatLng(mid.latitude, mid.longitude);
     var mapOptions = {
-      zoom: 16,
+      zoom: 1,
       center: myLatlng,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
@@ -44,6 +44,8 @@ module.exports = function(sw, ne) {
     );
 
     map.fitBounds(newBounds);
+
+    eventEmitter.emit('mixdown-log', { data: {sw: sw, ne: ne, zoom: map.getZoom(), bounds: map.getBounds() } });
 
   };
 

@@ -1,49 +1,32 @@
-var mixdown = require('mixdown-server'),
-  serverConfig = new mixdown.Config(require( './server.json')),
-  envConfig = null,
-  packageJSON = require('./package.json'),
-  util = require('util');
+var Mixdown = require('mixdown');
+var config = require( './server.json');
+var packageJSON = require('./package.json');
+var util = require('util');
 
-serverConfig.config.server.version = packageJSON.version;
+var mixdown = new Mixdown(config);
 
-// wire up error event listeners before initializing config.
-serverConfig.on('error', function(err) {
+mixdown.on('error', function(err) {
   console.info(err);
 });
 
-// load env config and apply it
 try {
-  serverConfig.env( require('./server-' + process.env.MIXDOWN_ENV + '.json') );
+  var env = require('./server-' + process.env.MIXDOWN_ENV + '.json');
+  mixdown.env(env);
 }
-catch (e) {}
+catch(e) {}
 
-var main = mixdown.MainFactory.create({
-  packageJSON: packageJSON,
-  serverConfig: serverConfig
-});
+mixdown.start(function(err) {
 
-serverConfig.init(function(err) {
+  logger.info(packageJSON.name + ' version: ' + packageJSON.version);
 
   if (err) {
-    logger.error('Server configuration failed to init: ' + util.inspect(err));
+    if (logger) {
+      logger.error('Server did not start');
+    }
+    else {
+      console.log('Server did not start');
+    }
+
     process.exit();
   }
-
-  logger.info(packageJSON.name + ' version: ' + serverConfig.server.version);
-
-  main.start(function(err, main) {
-
-    if (err) {
-      if (logger) {
-        logger.error('Server did not start');
-      }
-      else {
-        console.log('Server did not start');
-      }
-
-      process.exit();
-    }
-  });
 });
-
-

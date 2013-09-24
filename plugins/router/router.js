@@ -1,6 +1,8 @@
 var _ = require('lodash');
 var util = require('util');
 var MixdownRouter = require('mixdown-router');
+var path = require('path');
+var packageJSON = require( path.join(process.cwd(), '/package.json') );
 
 // router impl.
 var Router = function() {
@@ -22,7 +24,7 @@ Router.prototype.attach = function (options) {
 
   try {
   	// anytime you run npm version, this updates.
-    cachebuster = app.config.server.version;
+    cachebuster = packageJSON.version;
   }
   catch (e) {
     cachebuster = e.message;
