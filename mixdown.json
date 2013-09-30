@@ -217,7 +217,8 @@
             "./viewresolver",
             "crypto",
             "fs",
-            "file"
+            "file",
+            "formidable"
           ],
           "alias": {
             "underscore": "lodash"

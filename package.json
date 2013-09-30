@@ -26,8 +26,7 @@
     "start": "node server"
   },
   "dependencies": {
-    "lodash": "~2.0.0",
-    "mixdown-router": "~0.2.8",
+    "lodash": "~2.2.0",
     "mixdown": "~1.0.0",
     "mixdown-server": "~1.0.0",
     "mixdown-plugins": "~2.2.6",
@@ -40,7 +39,9 @@
     "cookies-js": "0.3.1",
     "hammerjs": "1.0.5",
     "mixdown-geotools": "*",
-    "node-pipeline": "~0.5.1"
+    "node-pipeline": "~0.5.1",
+    "async": "~0.2.9",
+    "mixdown-router": "~1.0.0"
   },
   "devDependencies": {
     "tap": "*",

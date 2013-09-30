@@ -1,5 +1,5 @@
 var Mixdown = require('mixdown');
-var config = require( './server.json');
+var config = require( './mixdown.json');
 var packageJSON = require('./package.json');
 var util = require('util');
 
@@ -10,7 +10,7 @@ mixdown.on('error', function(err) {
 });
 
 try {
-  var env = require('./server-' + process.env.MIXDOWN_ENV + '.json');
+  var env = require('./mixdown-' + process.env.MIXDOWN_ENV + '.json');
   mixdown.env(env);
 }
 catch(e) {}

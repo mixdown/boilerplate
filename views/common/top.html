@@ -11,9 +11,10 @@
 
   <script>
     window.eventEmitter.on('mixdown-load', function(app) {
-      {{! in case you want to attach our internal instance of jQuery to window }}
-      {{! you can also access any other libraries here }}
-      window.$ = window.jQuery = app.$;
+      console.log('Loading mixdown');
+    });
+    window.eventEmitter.on('mixdown-ready', function(app) {
+      app.plugins.router.listen();
     });
     window.eventEmitter.on('mixdown-error', console.error.bind(console));
     window.eventEmitter.on('mixdown-log', console.log.bind(console));

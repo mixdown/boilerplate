@@ -1,17 +1,11 @@
 // container pointers
-var Containers = function() {
-
-  this.attach = function(options) {
-    var app = options.app;
-    var $ = app.$;
-
-    this.containers = {
-      $wrapper: $('#mixdown-container'),
-      $main: $('#mixdown-main'),
-      $left: $('#mixdown-left'),
-      $header: $('header')
-    };
+module.exports = function() {
+  return {
+    wrapper: document.getElementById('mixdown-container'),
+    main: document.getElementById('mixdown-main'),
+    left: document.getElementById('mixdown-left'),
+    right: document.getElementById('mixdown-right'),
+    map: document.getElementById('mixdown-map'),
+    header: document.getElementsByTagName('header')[0]
   };
-
-};
-module.exports = Containers;
+}

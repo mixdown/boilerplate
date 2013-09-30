@@ -1,29 +1,55 @@
-var Backbone = require('backbone');
-var _ = require('lodash');
+var getContainers = require('../../containers.js');
 
-module.exports = Backbone.View.extend({
-  events: {
-    "click a": "navigate"
-  },
-  render: function(callback) {
-    var render = this.options.app.plugins.render;
-    var that = this;
+var ContentView = function(options) {
 
-    render('home/_content', this.model.toJSON(), function(err, html) {
-      that.$el = $(html);
-      that.options.$parent.append(that.$el);
-      that.delegateEvents();
-      _.isFunction(callback) ? callback(err) : null;
-    });
-  },
-  navigate: function(e) {
-    var backboneRouter = this.options.app.plugins.backboneRouter;
-    var href = $(e.target).attr('href');
-
-    // override local urls so that they are navigated via BB.
-    if (!/http/.test(href)) {
-      e.preventDefault();
-      backboneRouter.navigate( href, { trigger: true } );
-    }
+  if (!(this instanceof ContentView)) {
+    return new ContentView(options);
   }
-});
+
+  var el = options.el || getContainers().main;
+  var app = options.app;
+  
+  addEventListeners = function() {
+    var anchors = el.getElementsByTagName('a');
+
+    // Cannot enumerate NodeList - https://developer.mozilla.org/en-US/docs/Web/API/NodeList
+    for (var i = 0; i < anchors.length; i++) {
+      anchors[i].addEventListener('click', function(e) {
+        app.plugins.router.navigate(this.getAttribute('href'));
+        e.preventDefault();
+      }, false);
+    }
+
+  };
+
+  this.render = function(model, callback) {
+    var buf = [];
+    var err = [];
+
+    model.forEach(function(item) {
+      app.plugins.render('home/_content', item, function(errRender, html) {
+        if (err) { 
+          err.push(errRender); 
+        }
+        buf.push(html);
+      });
+    });
+
+    el.innerHTML =  buf.join('');
+    addEventListeners();
+    (typeof callback == 'function') ? callback(err) : null;
+  };
+};
+
+
+module.exports = function(namespace) {
+  namespace = namespace || 'contentView';
+
+  this.attach = function(options) {
+    this[namespace] = function(contentOptions) { 
+      contentOptions = contentOptions || {};
+      contentOptions.app = options.app;
+      return new ContentView(contentOptions);
+    };
+  };
+};
