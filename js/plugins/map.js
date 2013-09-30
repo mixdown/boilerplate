@@ -11,13 +11,18 @@ module.exports = function(namespace) {
     options = opt;
 
     var self = {
+      reset: function() {
+        _map = null;
+        self.clearMarkers();
+      },
 
       getMap: function(el, mapOptions) {
 
-        if (_map) {
+        if (!el && _map) {
           return _map;
         }
 
+        this.reset();
         mapOptions = mapOptions || {};
 
         // defaults

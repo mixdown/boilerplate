@@ -32,11 +32,12 @@ var ContentView = function(options) {
 
   this.render = function(model, callback) {
     var buf = [];
-    var err = [];
+    var err = null;
 
     model.forEach(function(item) {
       app.plugins.render('home/_content', item, function(errRender, html) {
-        if (err) { 
+        if (errRender) { 
+          err = err || [];
           err.push(errRender); 
         }
         buf.push(html);
