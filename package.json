@@ -27,26 +27,22 @@
   },
   "dependencies": {
     "lodash": "~2.2.0",
-    "mixdown": "~1.0.0",
-    "mixdown-server": "~1.0.0",
+    "mixdown": "~1.0.1",
+    "mixdown-server": "~1.0.1",
     "mixdown-plugins": "~2.2.6",
     "mixdown-pipelines": "~0.0.2",
-    "broadway-handlebars": "~0.2.3",
-    "mixdown-less": "~0.1.0",
+    "broadway-handlebars": "~0.2.4",
+    "mixdown-less": "~0.1.1",
     "broadway": "~0.2.7",
-    "backbone": "~1.0.0",
     "bootstrap": "git+https://github.com/twbs/bootstrap.git#v3.0.0",
-    "cookies-js": "0.3.1",
-    "hammerjs": "1.0.5",
     "mixdown-geotools": "*",
-    "node-pipeline": "~0.5.1",
     "async": "~0.2.9",
-    "mixdown-router": "~1.0.0"
+    "mixdown-router": "~1.0.1"
   },
   "devDependencies": {
-    "tap": "*",
-    "tape": "*",
-    "mocha": "*"
+    "tap": "~0.4.4",
+    "tape": "~1.1.1",
+    "mocha": "~1.13.0"
   },
   "optionalDependencies": {},
   "homepage": "http://vastdevblog.vast.com/"

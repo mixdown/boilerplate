@@ -14,9 +14,17 @@ var ContentView = function(options) {
 
     // Cannot enumerate NodeList - https://developer.mozilla.org/en-US/docs/Web/API/NodeList
     for (var i = 0; i < anchors.length; i++) {
+
       anchors[i].addEventListener('click', function(e) {
-        app.plugins.router.navigate(this.getAttribute('href'));
+        var href = this.getAttribute('href');
         e.preventDefault();
+
+        app.plugins.router.navigate(href, function(err, result) {
+          if (!result.matched) {
+            window.location.href = href;
+          }
+        });
+
       }, false);
     }
 
