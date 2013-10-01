@@ -31,7 +31,7 @@
     "mixdown-server": "~1.0.1",
     "mixdown-plugins": "~2.2.6",
     "mixdown-pipelines": "~0.0.2",
-    "broadway-handlebars": "~0.3.0",
+    "broadway-handlebars": "0.2.6",
     "mixdown-less": "~0.1.1",
     "broadway": "~0.2.7",
     "bootstrap": "git+https://github.com/twbs/bootstrap.git#v3.0.0",
