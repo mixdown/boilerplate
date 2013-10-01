@@ -37,7 +37,7 @@
     "bootstrap": "git+https://github.com/twbs/bootstrap.git#v3.0.0",
     "mixdown-geotools": "*",
     "async": "~0.2.9",
-    "mixdown-router": "~1.0.3"
+    "mixdown-router": "1.0.1"
   },
   "devDependencies": {
     "tap": "~0.4.4",
