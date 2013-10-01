@@ -23,7 +23,9 @@
     "node": ">=0.8.0"
   },
   "scripts": {
-    "start": "node server"
+    "start": "node server",
+    "postinstall": "lodash include=clone,cloneDeep,defaults,each,extend,find,isEmpty,isString,isArray,last,map,pick,range exports=node -m -o js/lodash.js && rm -rf node_modules/lodash-cli",
+    "preinstall": "npm install lodash-cli"
   },
   "dependencies": {
     "lodash": "~2.2.0",
@@ -31,13 +33,13 @@
     "mixdown-server": "~1.0.1",
     "mixdown-plugins": "~2.2.6",
     "mixdown-pipelines": "~0.0.2",
-    "broadway-handlebars": "0.2.6",
+    "broadway-handlebars": "~0.3.1",
     "mixdown-less": "~0.1.1",
     "broadway": "~0.2.7",
     "bootstrap": "git+https://github.com/twbs/bootstrap.git#v3.0.0",
     "mixdown-geotools": "*",
     "async": "~0.2.9",
-    "mixdown-router": "1.0.1"
+    "mixdown-router": "~1.0.4"
   },
   "devDependencies": {
     "tap": "~0.4.4",

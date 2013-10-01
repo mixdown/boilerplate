@@ -219,9 +219,11 @@
             "fs",
             "file",
             "formidable",
-            "underscore"
+            "underscore",
+            "path"
           ],
           "alias": {
+            "lodash": "./js/lodash.js"
           }
         }
       }
