@@ -21,11 +21,9 @@ mixdown.start(function(err) {
 
   if (err) {
     if (logger) {
-      logger.error('Server did not start');
+      logger.error('Server did not start. ' + err.stack);
     }
-    else {
-      console.log('Server did not start');
-    }
+    console.log('Server did not start. ' + err.stack);
 
     process.exit();
   }
